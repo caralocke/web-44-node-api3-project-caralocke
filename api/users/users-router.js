@@ -80,9 +80,16 @@ router.delete('/:id', validateUserId, (req, res) => {
     })
 });
 
-router.get('/:id/posts', (req, res) => {
+router.get('/:id/posts', validateUserId, (req, res) => {
   // RETURN THE ARRAY OF USER POSTS
   // this needs a middleware to verify user id
+  Users.getUserPosts(req.params.id)
+    .then(posts => {
+      res.status(200).json(posts)
+    })
+    .catch(err => {
+      res.status(500).json({ message: err.message})
+    })
 });
 
 router.post('/:id/posts', (req, res) => {
